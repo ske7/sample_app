@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.1.2'
+ruby '3.1.3'
 
 gem 'active_storage_validations', '0.9.8'
 gem 'bcrypt',                     '3.1.18'
@@ -49,4 +49,4 @@ end
 # Uncomment the following line if you're running Rails
 # on a native Windows system:
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
-gem 'wdm', '>= 0.1.0' if Gem.win_platform?
+gem 'wdm', platforms: %i[mingw mswin x64_mingw jruby]
