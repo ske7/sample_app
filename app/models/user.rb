@@ -9,5 +9,14 @@ class User < ApplicationRecord
                     uniqueness: true
 
   has_secure_password
-  validates :password, presence: true, length: { minimum: 6 }
+  validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
+  # before_validation :strip_whitespace
+
+  private
+
+  def strip_whitespace
+    name&.strip!
+    email&.strip!
+    password&.strip!
+  end
 end
