@@ -10,13 +10,10 @@ class User < ApplicationRecord
 
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
-  # before_validation :strip_whitespace
 
-  private
+  def self.digest(string)
+    cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
 
-  def strip_whitespace
-    name&.strip!
-    email&.strip!
-    password&.strip!
+    BCrypt::Password.create(string, cost:)
   end
 end

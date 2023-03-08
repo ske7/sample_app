@@ -30,8 +30,11 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  hello: 'Hello world'
 en:
   users:
     create:
-      success: "Welcome to the Sample App!"
+      success: 'Welcome to the Sample App!'
+  sessions:
+    create:
+      danger: 'Invalid email/password combination'
