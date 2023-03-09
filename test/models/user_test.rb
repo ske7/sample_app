@@ -7,7 +7,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'should be valid' do
-    assert_predicate(@user, :valid?)
+    assert @user.valid?
   end
 
   test 'name should be present' do
@@ -40,7 +40,7 @@ class UserTest < ActiveSupport::TestCase
     valid_addresses.each do |valid_address|
       @user.email = valid_address
 
-      assert_predicate(@user, :valid?)
+      assert @user.valid?
     end
   end
 
@@ -50,7 +50,7 @@ class UserTest < ActiveSupport::TestCase
     invalid_addresses.each do |invalid_address|
       @user.email = invalid_address
 
-      assert_not_predicate(@user, :valid?)
+      assert_not @user.valid?
     end
   end
 
@@ -58,7 +58,7 @@ class UserTest < ActiveSupport::TestCase
     duplicate_user = @user.dup
     @user.save
 
-    assert_not_predicate(duplicate_user, :valid?)
+    assert_not duplicate_user.valid?
   end
 
   test 'email addresses should be saved as lowercase' do
@@ -79,5 +79,9 @@ class UserTest < ActiveSupport::TestCase
     @user.password = @user.password_confirmation = 'a' * 5
 
     assert_not @user.valid?
+  end
+
+  test 'authenticated? should return false for a user with a nil digest' do
+    assert_not @user.authenticated?('some')
   end
 end

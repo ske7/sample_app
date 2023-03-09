@@ -1,6 +1,9 @@
 // Menu manipulation
 function addToggleListener(buttonId, menuId, toggleClass) {
   let button = document.querySelector(`#${buttonId}`);
+  if (!button) {
+    return;
+  }
   button.addEventListener('click', function(event) {
     event.preventDefault();
     let menu = document.querySelector(`#${menuId}`);

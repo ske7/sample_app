@@ -31,6 +31,6 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
 
     assert_template 'users/show'
     assert_not flash.empty?
-    assert_predicate(self, :logged_in_for_test?)
+    assert logged_in_for_test?
   end
 end
