@@ -73,6 +73,9 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.8.1)
       public_suffix (>= 2.0.2, < 6.0)
+    annotate (3.2.0)
+      activerecord (>= 3.2, < 8.0)
+      rake (>= 10.4, < 14.0)
     ansi (1.5.0)
     autoprefixer-rails (10.4.13.0)
       execjs (~> 2)
@@ -315,6 +318,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_storage_validations (= 0.9.8)
+  annotate (~> 3.2)
   aws-sdk-s3 (= 1.114.0)
   bcrypt (= 3.1.18)
   bootsnap (= 1.12.0)
