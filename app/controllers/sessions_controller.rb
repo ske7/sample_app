@@ -5,6 +5,8 @@ class SessionsController < ApplicationController
   def create
     @user = User.find_by(email: params[:session][:email].downcase)
     if @user&.authenticate(params[:session][:password])
+      forwarding_url = session[:forwarding_url]
+
       reset_session
       if params[:session][:remember_me] == '1'
         remember(@user)
@@ -12,7 +14,7 @@ class SessionsController < ApplicationController
         forget(@user)
       end
       log_in @user
-      redirect_to @user
+      redirect_to forwarding_url || @user
     else
       flash.now[:danger] = t('.danger')
       render 'new', status: :unprocessable_entity

@@ -35,6 +35,14 @@ en:
   users:
     create:
       success: 'Welcome to the Sample App!'
+    update:
+      success: 'Profile updated'
+    edit:
+      please_login: 'Please log in.'
+    index:
+      please_login: 'Please log in.'
+    destroy:
+      success: 'User deleted'
   sessions:
     create:
       danger: 'Invalid email/password combination'

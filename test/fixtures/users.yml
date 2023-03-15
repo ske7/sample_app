@@ -3,6 +3,7 @@
 # Table name: users
 #
 #  id              :integer          not null, primary key
+#  admin           :boolean          default(FALSE)
 #  email           :string
 #  name            :string
 #  password_digest :string
@@ -18,3 +19,21 @@ test_user:
   name: 'Test User'
   email: 'test@test.com'
   password_digest: <%= User.digest('password') %>
+  admin: true
+
+other_user:
+  name: 'Other User'
+  email: 'other@test.com'
+  password_digest: <%= User.digest('password') %>
+
+bob:
+  name: 'bob'
+  email: 'bob@test.com'
+  password_digest: <%= User.digest('password') %>
+
+<% 10.times do |n| %>
+user_<%= n %>:
+ name: <%= "User #{n}" %>
+ email: <%= "user-#{n}@example.com" %>
+ password_digest: <%= User.digest('password') %>
+<% end %>
