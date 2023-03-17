@@ -1,98 +1,96 @@
 require 'test_helper'
 
-class UsersLoginTest < ActionDispatch::IntegrationTest
-  class UsersLogin < ActionDispatch::IntegrationTest
-    def setup
-      @user = users(:test_user)
-    end
+class UsersLogin < ActionDispatch::IntegrationTest
+  def setup
+    @user = users(:test_user)
+  end
+end
+
+class InvalidPasswordTest < UsersLogin
+  test 'login path' do
+    get login_path
+
+    assert_template 'sessions/new'
   end
 
-  class InvalidPasswordTest < UsersLogin
-    test 'login path' do
-      get login_path
+  test 'login with valid email/invalid password' do
+    post login_path, params: { session: { email: @user.email, password: 'invalid' } }
 
-      assert_template 'sessions/new'
-    end
+    assert_not logged_in_for_test?
+    assert_response :unprocessable_entity
+    assert_template 'sessions/new'
+    assert_not flash.empty?
+    get root_path
 
-    test 'login with valid email/invalid password' do
-      post login_path, params: { session: { email: @user.email, password: 'invalid' } }
+    assert_empty(flash)
+  end
+end
 
-      assert_not logged_in_for_test?
-      assert_response :unprocessable_entity
-      assert_template 'sessions/new'
-      assert_not flash.empty?
-      get root_path
+class ValidLogin < UsersLogin
+  def setup
+    super
+    post login_path, params: { session: { email: @user.email, password: 'password' } }
+  end
+end
 
-      assert_empty(flash)
-    end
+class ValidLoginTest < ValidLogin
+  test 'valid login' do
+    assert logged_in_for_test?
+    assert_redirected_to @user
   end
 
-  class LoginRemember < UsersLogin
-    test 'login with remembering' do
-      log_in_as(@user, remember_me: '1')
+  test 'redirect after login' do
+    follow_redirect!
 
-      assert_equal cookies[:remember_token], assigns(:user).remember_token
-    end
+    assert_template 'users/show'
+    assert_select 'a[href=?]', login_path, count: 0
+    assert_select 'a[href=?]', logout_path
+    assert_select 'a[href=?]', user_path(@user)
+  end
+end
 
-    test 'login without remembering' do
-      # Log in to set the cookie.
-      log_in_as(@user, remember_me: '1')
-      # Log in again and verify that the cookie is deleted.
-      log_in_as(@user, remember_me: '0')
+class Logout < ValidLogin
+  def setup
+    super
+    delete logout_path
+  end
+end
 
-      assert cookies[:remember_token].blank?
-    end
+class LogoutTest < Logout
+  test 'successful logout' do
+    assert_not logged_in_for_test?
+    assert_response :see_other
+    assert_redirected_to root_url
   end
 
-  class ValidLogin < UsersLogin
-    def setup
-      super
-      post login_path, params: { session: { email: @user.email, password: 'password' } }
-    end
+  test 'redirect after logout' do
+    follow_redirect!
+
+    assert_select 'a[href=?]', login_path
+    assert_select 'a[href=?]', logout_path, count: 0
+    assert_select 'a[href=?]', user_path(@user), count: 0
   end
 
-  class ValidLoginTest < ValidLogin
-    test 'valid login' do
-      assert logged_in_for_test?
-      assert_redirected_to @user
-    end
+  test 'should still work after logout in second window' do
+    delete logout_path
 
-    test 'redirect after login' do
-      follow_redirect!
+    assert_redirected_to root_url
+  end
+end
 
-      assert_template 'users/show'
-      assert_select 'a[href=?]', login_path, count: 0
-      assert_select 'a[href=?]', logout_path
-      assert_select 'a[href=?]', user_path(@user)
-    end
+class RememberingTest < UsersLogin
+  test 'login with remembering' do
+    log_in_as(@user, remember_me: '1')
+
+    assert_equal cookies[:remember_token], assigns(:user).remember_token
   end
 
-  class Logout < ValidLogin
-    def setup
-      super
-      delete logout_path
-    end
-  end
+  test 'login without remembering' do
+    # Log in to set the cookie.
+    log_in_as(@user, remember_me: '1')
+    # Log in again and verify that the cookie is deleted.
+    log_in_as(@user, remember_me: '0')
 
-  class LogoutTest < Logout
-    test 'successful logout' do
-      assert_not logged_in_for_test?
-      assert_response :see_other
-      assert_redirected_to root_url
-    end
-
-    test 'redirect after logout' do
-      follow_redirect!
-
-      assert_select 'a[href=?]', login_path
-      assert_select 'a[href=?]', logout_path, count: 0
-      assert_select 'a[href=?]', user_path(@user), count: 0
-    end
-
-    test 'should still work after logout in second window' do
-      delete logout_path
-
-      assert_redirected_to root_url
-    end
+    assert cookies[:remember_token].blank?
   end
 end

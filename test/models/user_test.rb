@@ -2,14 +2,17 @@
 #
 # Table name: users
 #
-#  id              :integer          not null, primary key
-#  admin           :boolean          default(FALSE)
-#  email           :string
-#  name            :string
-#  password_digest :string
-#  remember_digest :string
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
+#  id                :integer          not null, primary key
+#  activated         :boolean          default(FALSE)
+#  activated_at      :datetime
+#  activation_digest :string
+#  admin             :boolean          default(FALSE)
+#  email             :string
+#  name              :string
+#  password_digest   :string
+#  remember_digest   :string
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
 #
 # Indexes
 #
@@ -99,6 +102,6 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'authenticated? should return false for a user with a nil digest' do
-    assert_not @user.authenticated?('some')
+    assert_not @user.authenticated?(:remember, 'some')
   end
 end

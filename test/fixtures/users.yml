@@ -2,14 +2,17 @@
 #
 # Table name: users
 #
-#  id              :integer          not null, primary key
-#  admin           :boolean          default(FALSE)
-#  email           :string
-#  name            :string
-#  password_digest :string
-#  remember_digest :string
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
+#  id                :integer          not null, primary key
+#  activated         :boolean          default(FALSE)
+#  activated_at      :datetime
+#  activation_digest :string
+#  admin             :boolean          default(FALSE)
+#  email             :string
+#  name              :string
+#  password_digest   :string
+#  remember_digest   :string
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
 #
 # Indexes
 #
@@ -20,20 +23,36 @@ test_user:
   email: 'test@test.com'
   password_digest: <%= User.digest('password') %>
   admin: true
+  activated: true
+  activated_at: <%= Time.zone.now %>
 
 other_user:
   name: 'Other User'
   email: 'other@test.com'
   password_digest: <%= User.digest('password') %>
+  activated: true
+  activated_at: <%= Time.zone.now %>
 
 bob:
   name: 'bob'
   email: 'bob@test.com'
   password_digest: <%= User.digest('password') %>
+  activated: true
+  activated_at: <%= Time.zone.now %>
+
+inactive:
+  name: Inactive User
+  email: inactive@example.com
+  password_digest: <%= User.digest('password') %>
+  admin: false
+  activated: false
+  activated_at: nil
 
 <% 10.times do |n| %>
 user_<%= n %>:
- name: <%= "User #{n}" %>
- email: <%= "user-#{n}@example.com" %>
- password_digest: <%= User.digest('password') %>
+  name: <%= "User #{n}" %>
+  email: <%= "user-#{n}@example.com" %>
+  password_digest: <%= User.digest('password') %>
+  activated: true
+  activated_at: <%= Time.zone.now %>
 <% end %>

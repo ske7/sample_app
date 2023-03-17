@@ -5,8 +5,14 @@ class SessionsController < ApplicationController
   def create
     @user = User.find_by(email: params[:session][:email].downcase)
     if @user&.authenticate(params[:session][:password])
+      unless @user.activated?
+        message = 'Account not activated. '
+        message += 'Check your email for the activation link.'
+        flash[:warning] = message
+        redirect_to root_url
+        return
+      end
       forwarding_url = session[:forwarding_url]
-
       reset_session
       if params[:session][:remember_me] == '1'
         remember(@user)

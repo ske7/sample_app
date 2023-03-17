@@ -35,6 +35,7 @@ en:
   users:
     create:
       success: 'Welcome to the Sample App!'
+      info: 'Please check your email to activate your account.'
     update:
       success: 'Profile updated'
     edit:
