@@ -75,4 +75,16 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :see_other
     assert_redirected_to root_url
   end
+
+  test 'should redirect follwing when not logged in' do
+    get following_user_path(@user)
+
+    assert_redirected_to login_url
+  end
+
+  test 'should redirect follwers when not logged in' do
+    get followers_user_path(@user)
+
+    assert_redirected_to login_url
+  end
 end

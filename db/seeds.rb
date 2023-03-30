@@ -1,3 +1,4 @@
+# Users
 if User.count.zero?
   # Create a main sample user.
   User.create!(name: 'Example User',
@@ -30,6 +31,7 @@ if User.count.zero?
   end
 end
 
+# Microposts
 unless User.count.zero?
   users = User.order(:created_at).first(6)
 
@@ -38,3 +40,12 @@ unless User.count.zero?
     users.each { |user| user.microposts.create!(content:) }
   end
 end
+
+# Following relationships
+users = User.all
+user = users.where(email: 'demilichkangaxx@gmail.com').first
+following = users[2..50]
+followers = users[3..40]
+
+following.each { |followed| user.follow(followed) }
+followers.each { |follower| follower.follow(user) }
