@@ -17,7 +17,7 @@
       <h3>Microposts (<%= @user.microposts.count %>)</h3>
     <% end %>
     <ol class="microposts">
-      <%= render @microposts %>
+      <%= render partial: 'microposts/micropost', collection: @microposts %>
     </ol>
     <%= will_paginate @microposts %>
   </div>
